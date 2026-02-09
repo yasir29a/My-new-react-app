@@ -1,0 +1,13 @@
+{
+  "name": "modern-like-system",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "install-all": "npm --prefix server install && npm --prefix client install",
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "start": "node server/index.js"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}
