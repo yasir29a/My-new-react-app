@@ -10,8 +10,8 @@ import Contact from './pages/Contact'
 import FAQ from './pages/FAQ'
 import Footer from './components/Footer'
 
-// Initialize Stripe - Replace with your actual publishable key
-const stripePromise = loadStripe('pk_test_51234567890abcdefghijklmnop')
+// Initialize Stripe with publishable key from environment
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY)
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
