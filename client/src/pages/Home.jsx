@@ -1,11 +1,30 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { lookup } from '../api'
+import PaymentModal from '../components/PaymentModal'
+
+const plan = {
+  id: 'friendly',
+  name: 'Friendly',
+  price: '£24.99',
+  description: 'Perfect for first-time buyers who want comprehensive vehicle insights',
+  features: [
+    'Vehicle Overview',
+    'Market Value',
+    'Vehicle Specifications',
+    'Sales Listing',
+    'Accident Record',
+    'Theft Record',
+    'Open Recalls',
+    'Impounds'
+  ]
+}
 
 export default function Home() {
   const [reg, setReg] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showPayment, setShowPayment] = useState(false)
   const navigate = useNavigate()
 
   async function handleSubmit(e) {
@@ -27,8 +46,25 @@ export default function Home() {
     }
   }
 
+  const handleBuyReport = () => {
+    setShowPayment(true)
+  }
+
+  const handlePaymentSuccess = () => {
+    setShowPayment(false)
+    alert('Payment successful! Your report will be delivered shortly.')
+  }
+
   return (
     <div className="home">
+      {showPayment && (
+        <PaymentModal
+          plan={plan}
+          onClose={() => setShowPayment(false)}
+          onSuccess={handlePaymentSuccess}
+        />
+      )}
+
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content hero-grid">
@@ -118,24 +154,19 @@ export default function Home() {
         <div className="plans-grid">
           <div className="plan-card">
             <div className="plan-badge">Most Popular</div>
-            <h3>Friendly</h3>
-            <p className="plan-description">Perfect for first-time buyers who want comprehensive vehicle insights</p>
-            <div className="plan-price">£24.99</div>
+            <h3>{plan.name}</h3>
+            <p className="plan-description">{plan.description}</p>
+            <div className="plan-price">{plan.price}</div>
             <div className="plan-time">1-3 Hours Fast</div>
             <div className="plan-features">
               <h4>Includes:</h4>
               <ul>
-                <li>Vehicle Overview</li>
-                <li>Market Value</li>
-                <li>Vehicle Specifications</li>
-                <li>Sales Listing</li>
-                <li>Accident Record</li>
-                <li>Theft Record</li>
-                <li>Open Recalls</li>
-                <li>Impounds</li>
+                {plan.features.map((feature, idx) => (
+                  <li key={idx}>{feature}</li>
+                ))}
               </ul>
             </div>
-            <button className="btn-primary" onClick={() => alert('Proceed to checkout')}>Buy Your Report</button>
+            <button className="btn-primary" onClick={handleBuyReport}>Buy Your Report</button>
           </div>
         </div>
         <div className="guarantee">

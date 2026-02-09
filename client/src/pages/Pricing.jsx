@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PaymentModal from '../components/PaymentModal'
 
 const plans = [
   {
@@ -57,15 +58,29 @@ const plans = [
 
 export default function Pricing(){
   const [selectedPlan, setSelectedPlan] = useState(null)
+  const [showPayment, setShowPayment] = useState(false)
 
-  const handleBuyNow = (planId) => {
-    setSelectedPlan(planId)
-    // Redirect to home page with VIN input ready
-    window.location.hash = '/'
+  const handleBuyNow = (plan) => {
+    setSelectedPlan(plan)
+    setShowPayment(true)
+  }
+
+  const handlePaymentSuccess = () => {
+    setShowPayment(false)
+    setSelectedPlan(null)
+    alert('Payment successful! Your report will be delivered shortly.')
   }
 
   return (
     <div className="page pricing-page">
+      {showPayment && selectedPlan && (
+        <PaymentModal
+          plan={selectedPlan}
+          onClose={() => setShowPayment(false)}
+          onSuccess={handlePaymentSuccess}
+        />
+      )}
+
       {/* Header */}
       <section className="pricing-header">
         <h1>Transparent, Simple Pricing</h1>
@@ -104,7 +119,7 @@ export default function Pricing(){
 
             <button 
               className={`buy-button ${plan.popular ? 'primary' : 'secondary'}`}
-              onClick={() => handleBuyNow(plan.id)}
+              onClick={() => handleBuyNow(plan)}
             >
               Get Started
             </button>
@@ -141,7 +156,7 @@ export default function Pricing(){
         <p>Check any vehicle in seconds with our professional inspection reports</p>
         <button 
           className="cta-button-pricing"
-          onClick={() => window.location.hash = '/'}
+          onClick={() => handleBuyNow(plans[1])}
         >
           Start Your First Check
         </button>
